@@ -20,11 +20,11 @@ author: Kihoon Lim
 ###############################################
 
 navbar-links:
-  About Me: "SW Engineer"
-  Resources:
-    - Beautiful Jekyll: "https://beautifuljekyll.com"
-    - Learn markdown: "https://www.markdowntutorial.com/"
-  Author's home: "https://deanattali.com"
+  #About Me: "aboutme"
+  #Resources:
+  #  - Beautiful Jekyll: "https://beautifuljekyll.com"
+  #  - Learn markdown: "https://www.markdowntutorial.com/"
+  #Author's home: "https://deanattali.com"
 
 ################
 # --- Logo --- #
@@ -52,13 +52,13 @@ social-network-links:
 #  email: "someone@example.com"
   rss: true  # remove this line if you don't want to show an RSS link at the bottom
 #  facebook: deanattali
-  github: https://github.com/kihun1212
+  github: kihun1212
 #  twitter: daattali
 #  patreon: DeanAttali
 #  youtube: c/daattali
 #  medium: yourname
 #  reddit: yourname
-  linkedin: linkedin.com/in/kihoon-l-297a35275
+  linkedin: kihoon-l-297a35275
 #  xing: yourname
 #  stackoverflow: "3943160/daattali"
 #  snapchat: deanat78
@@ -249,7 +249,7 @@ date_format: "%B %-d, %Y"
 #################################################################################
 
 # Output options (more information on Jekyll's site)
-timezone: "America/Toronto"
+timezone: "Korea/Seoul"
 markdown: kramdown
 highlighter: rouge
 permalink: /:year-:month-:day-:title/
