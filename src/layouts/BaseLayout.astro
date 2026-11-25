@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'A Simple Blog',
+  description = 'Notes, ideas, and things I have learned.',
+} = Astro.props;
+const pageTitle = title === 'A Simple Blog' ? title : `${title} | A Simple Blog`;
+const pageUrl = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#09090b" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem('theme');
+      const theme = savedTheme === 'light' ? 'light' : 'dark';
+      document.documentElement.classList.remove('light', 'dark');
+      document.documentElement.classList.add(theme);
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <div class="mx-auto flex min-h-screen max-w-2xl flex-col px-6">
+      <header class="flex items-center justify-between border-b border-zinc-200 py-6 dark:border-zinc-800">
+        <a class="font-semibold tracking-tight" href={`${import.meta.env.BASE_URL}`}>A Simple Blog</a>
+        <div class="flex items-center gap-5">
+          <nav aria-label="Main navigation" class="flex gap-4 text-sm text-zinc-600 dark:text-zinc-400">
+            <a class="transition hover:text-zinc-950 dark:hover:text-white" href={`${import.meta.env.BASE_URL}`}>Home</a>
+            <a class="transition hover:text-zinc-950 dark:hover:text-white" href={`${import.meta.env.BASE_URL}posts/`}>Posts</a>
+            <a class="transition hover:text-zinc-950 dark:hover:text-white" href={`${import.meta.env.BASE_URL}about/`}>About</a>
+          </nav>
+          <button
+            id="theme-toggle"
+            type="button"
+            class="rounded-md border border-zinc-300 px-2.5 py-1.5 text-xs text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+            aria-label="Switch to light theme"
+            title="Switch theme"
+          >
+            Light
+          </button>
+        </div>
+      </header>
+      <main class="flex-1 py-12">
+        <slot />
+      </main>
+      <footer class="border-t border-zinc-200 py-6 text-sm text-zinc-500 dark:border-zinc-800">
+        <p>© {new Date().getFullYear()} A Simple Blog. Built with care.</p>
+      </footer>
+    </div>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('#theme-toggle');
+      const root = document.documentElement;
+
+      function updateThemeButton() {
+        const isDark = root.classList.contains('dark');
+        if (!toggle) return;
+        toggle.textContent = isDark ? 'Light' : 'Dark';
+        toggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} theme`);
+      }
+
+      updateThemeButton();
+      toggle?.addEventListener('click', () => {
+        const nextTheme = root.classList.contains('dark') ? 'light' : 'dark';
+        root.classList.remove('light', 'dark');
+        root.classList.add(nextTheme);
+        localStorage.setItem('theme', nextTheme);
+        updateThemeButton();
+      });
+    </script>
+  </body>
+</html>

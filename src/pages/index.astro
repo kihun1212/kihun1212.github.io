@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<BaseLayout description="Notes, ideas, and things I have learned.">
+  <section class="mb-14">
+    <p class="mb-3 text-sm font-medium text-zinc-500 dark:text-zinc-400">Hello, I'm Alex.</p>
+    <h1 class="max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">A quiet place for notes and ideas.</h1>
+    <p class="mt-4 max-w-xl leading-7 text-zinc-600 dark:text-zinc-400">
+      I write about things I learn, projects I make, and ideas worth keeping.
+    </p>
+  </section>
+
+  <section aria-labelledby="latest-posts">
+    <div class="mb-5 flex items-baseline justify-between">
+      <h2 id="latest-posts" class="text-lg font-semibold tracking-tight">Latest posts</h2>
+      <a class="text-sm text-zinc-500 transition hover:text-zinc-950 dark:hover:text-white" href={`${import.meta.env.BASE_URL}posts/`}>All posts →</a>
+    </div>
+    {posts.length > 0 ? (
+      <ul class="divide-y divide-zinc-200 dark:divide-zinc-800">
+        {posts.map((post) => (
+          <li class="py-5">
+            <a class="group block" href={`${import.meta.env.BASE_URL}posts/${post.id}/`}>
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                <h3 class="font-medium tracking-tight group-hover:underline">{post.data.title}</h3>
+                <time class="shrink-0 text-sm text-zinc-500 dark:text-zinc-400" datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}
+                </time>
+              </div>
+              <p class="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">{post.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-sm text-zinc-500 dark:text-zinc-400">No posts yet.</p>
+    )}
+  </section>
+</BaseLayout>
